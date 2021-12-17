@@ -114,11 +114,11 @@ app.post('/subscribe', function(req, res){
     console.log(req.body);
     create_subscription(req.body).then(function (response) {
         console.log(response);
-        res.send(response.data);
+        res.render("message", {"message": JSON.stringify(response.data)});
       })
       .catch(function (error) {
         console.log(error);
-        res.redirect('/failure?message='+error.message);
+        res.render("message", {"message": error.message});
         // res.status(500).send({"message": "Error sending message"});
       });
     
@@ -129,11 +129,11 @@ app.post('/create_topic', function(req, res){
     console.log(req.body);
     create_topic(req.body).then(function (response) {
         console.log(response);
-        res.send("Topic created successfully");
+        res.render("message", {"message": "Topic created successfully"});
       })
       .catch(function (error) {
         console.log(error);
-        res.redirect('/failure?message='+error.message);
+        res.render("message", {"message": error.message});
         // res.status(500).send({"message": "Error sending message"});
       });
     
@@ -143,11 +143,11 @@ app.post('/send_message', function(req, res){
     console.log(req.body);
     send_message(req.body).then(function (response) {
         console.log(response);
-        res.send("Message sent");
+        res.render("message", {"message": "Message sent successfully"});
       })
       .catch(function (error) {
         console.log(error);
-        res.redirect('/failure?message='+error.message);
+        res.render("message", {"message": error.message});
         // res.status(500).send({"message": "Error sending message"});
       });
     

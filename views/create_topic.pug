@@ -3,6 +3,8 @@ html
    head
       title Form Tester
    body
+      include ./header.pug
+
       form(action = "/create_topic", method = "POST")
          div
             label(for = "topic") Create a new topic:
