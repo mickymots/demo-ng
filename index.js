@@ -21,6 +21,15 @@ app.get('/create_topic', function(req, res){
  });
 
 
+app.get('/create_topic', function(req, res){
+    res.render('create_topic');
+ });
+
+ app.get('/subscribe', function(req, res){
+    res.render('subscribe');
+ });
+
+
 app.set('view engine', 'pug');
 app.set('views', './views');
 
@@ -56,21 +65,79 @@ const send_message = (req) => {
         headers: {  'Content-Type': 'application/json', 'authorizationToken':'YNQXmb4oYv9rSboLGFVmC5b9zszBfZtg5wcFVoD2' },
               
         data: message
-      };
-
-      
+      };      
       return axios(options)
-     
-    
-   
+}
 
+
+const create_topic = (req) => {
+    console.log(req);
+    var message = {
+        "topic_name": req.topic,
+    }
+    var options = {
+        baseURL: url,
+        url: 'topic',
+        method : 'PUT',
+        headers: {  'Content-Type': 'application/json', 'authorizationToken':'YNQXmb4oYv9rSboLGFVmC5b9zszBfZtg5wcFVoD2' },
+              
+        data: message
+      };      
+      return axios(options)
 }
 
 app.get('/failure', function(req, res){
    
-    res.render('failure', {"message": "Error sending message"});
+    res.render('failure', {"message": "Error occured"});
 });
 
+
+const create_subscription = (req) => {
+    console.log(req);
+    var message = {
+        "email": req.email,
+    }
+    var options = {
+        baseURL: url,
+        url: 'subscribe',
+        method : 'PUT',
+        headers: {  'Content-Type': 'application/json', 'authorizationToken':'YNQXmb4oYv9rSboLGFVmC5b9zszBfZtg5wcFVoD2' },
+              
+        data: message
+      };      
+      return axios(options)
+}
+
+
+
+app.post('/subscribe', function(req, res){
+    console.log(req.body);
+    create_subscription(req.body).then(function (response) {
+        console.log(response);
+        res.send(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        res.redirect('/failure?message='+error.message);
+        // res.status(500).send({"message": "Error sending message"});
+      });
+    
+ });
+
+
+app.post('/create_topic', function(req, res){
+    console.log(req.body);
+    create_topic(req.body).then(function (response) {
+        console.log(response);
+        res.send("Topic created successfully");
+      })
+      .catch(function (error) {
+        console.log(error);
+        res.redirect('/failure?message='+error.message);
+        // res.status(500).send({"message": "Error sending message"});
+      });
+    
+ });
 
 app.post('/send_message', function(req, res){
     console.log(req.body);
